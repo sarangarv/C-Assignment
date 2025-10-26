@@ -1,5 +1,47 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
+
+#define MAX_CITIES 30
+#define MAX_DELIVERIES 50
+
+struct City {
+    char name[20];
+};
+
+struct Vehicle {
+    char name[10];
+    int capacity;
+    float rate;
+    float speed;
+    float efficiency;
+};
+
+struct Delivery {
+    char from[20];
+    char to[20];
+    float distance;
+    float weight;
+    char vehicle[10];
+    float cost;
+};
+
+struct SystemData {
+    struct City cities[MAX_CITIES];
+    int cityCount;
+    float distanceTable[MAX_CITIES][MAX_CITIES];
+    struct Delivery deliveries[MAX_DELIVERIES];
+    int deliveryCount;
+};
+
+struct Vehicle vehicles[3] = {
+    {"Van", 1000, 30, 60, 12},
+    {"Truck", 5000, 40, 50, 6},
+    {"Lorry", 10000, 80, 45, 4}
+};
+
+float fuelPrice = 310.0; // LKR per litre
+
+/* -------- Functions -------- */
 
 
 int main() {
@@ -21,14 +63,14 @@ int main() {
         scanf("%d", &choice);
 
         switch (choice) {
-            case 1: add_city(&sys); break;
-            case 2: rename_city(&sys); break;
-            case 3: remove_city(&sys); break;
-            case 4: show_cities(&sys); break;
-            case 5: set_distance(&sys); break;
-            case 6: create_delivery(&sys); break;
-            case 7: show_deliveries(&sys); break;
-            case 8: show_report(&sys); break;
+            case 1:  break;
+            case 2:  break;
+            case 3:  break;
+            case 4:  break;
+            case 5:  break;
+            case 6:  break;
+            case 7:  break;
+            case 8:  break;
             case 9: printf("Exiting program...\n"); break;
             default: printf("Invalid choice! Try again.\n");
         }
