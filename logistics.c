@@ -236,6 +236,18 @@ void create_delivery(struct SystemData *sys) {
     printf("Vehicle: %s | Distance: %.2f km | Time Duration: %.2f Hours | Cost: %.2f LKR\n", del.vehicle, del.distance,del.distance/v.speed, del.cost);
 }
 
+void show_deliveries(struct SystemData *sys) {
+    printf("\n--- Delivery Records ---\n");
+    for (int i = 0; i < sys->deliveryCount; i++) {
+        printf("%d. %s → %s | Vehicle: %s | Distance: %.2f km | Cost: %.2f LKR\n",
+               i + 1,
+               sys->deliveries[i].from,
+               sys->deliveries[i].to,
+               sys->deliveries[i].vehicle,
+               sys->deliveries[i].distance,
+               sys->deliveries[i].cost);
+    }
+}
 
 int main() {
     struct SystemData sys = {0}; // all values set to 0
@@ -250,8 +262,9 @@ int main() {
         printf("5. Set Distance.\n");
         printf("6. Create Delivery.\n");
         printf("7. Show Deliveries.\n");
-        printf("8. Show Report.\n");
-        printf("9. Exit\n");
+        printf("8. Show Cities & Distance.\n");
+        printf("9. Show Report.\n");
+        printf("10. Exit\n");
         printf("Enter choice: ");
         scanf("%d", &choice);
 
@@ -264,9 +277,10 @@ int main() {
             case 6:  create_delivery(&sys); break;
             case 7:  break;
             case 8:  break;
-            case 9: printf("Exiting program...\n"); break;
+            case 9:  break;
+            case 10: printf("Exiting program...\n"); break;
             default: printf("Invalid choice! Try again.\n");
         }
-    } while (choice != 9);
+    } while (choice != 10);
     return 0;
 }
