@@ -64,6 +64,104 @@ void add_city(struct SystemData *sys) {
     }
 }
 
+void rename_city(struct SystemData *sys) {
+    if (sys->cityCount == 0) {
+        printf("No cities to rename!\n");
+        return;
+    }
+
+    char oldName[20], newName[20];
+    printf("Enter city to rename: ");
+    scanf("%s", oldName);
+    printf("Enter new name: ");
+    scanf("%s", newName);
+
+    for (int i = 0; i < sys->cityCount; i++) {
+        if (strcmp(sys->cities[i].name, oldName) == 0) {
+            strcpy(sys->cities[i].name, newName);
+
+
+            printf("City renamed successfully!\n");
+            return;
+        }
+    }
+    printf("City not found!\n");
+}
+
+void remove_city(struct SystemData *sys) {
+    if (sys->cityCount == 0) {
+        printf("No cities to remove!\n");
+        return;
+    }
+
+    char name[20];
+    printf("Enter city to remove: ");
+    scanf("%s", name);
+
+    // Find city
+    int found = 0;
+    for (int i = 0; i < sys->cityCount; i++) {
+        if (strcmp(sys->cities[i].name, name) == 0) {
+            found = 1;
+            // Shift cities
+            for (int j = i; j < sys->cityCount - 1; j++)
+                sys->cities[j] = sys->cities[j + 1];
+            sys->cityCount--;
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("City not found!\n");
+        return;
+    }
+
+
+    printf("City and related deliveries removed.\n");
+}
+
+void show_cities(struct SystemData *sys) {
+    printf("\n--- City List ---\n");
+    for (int i = 0; i < sys->cityCount; i++)
+        printf("%d. %s\n", i + 1, sys->cities[i].name);
+}
+
+void set_distance(struct SystemData *sys) {
+    if (sys->cityCount < 2) {
+        printf("Please add at least 2 cities first!\n");
+        return;
+    }
+    printf("\nTo Exit Enter '0'\n\n");
+    while(1){
+    show_cities(sys);
+    int a, b;
+    float d;
+    printf("Enter source city number: ");
+    scanf("%d", &a);
+
+    if(a==0)
+        break;
+
+    printf("Enter destination city number: ");
+    scanf("%d", &b);
+    do{if(b==a){
+        printf("Invalid Destination.\n");
+        printf("Enter destination city number: ");
+        scanf("%d", &b);
+    }}while(b==a);
+
+    if(sys->distanceTable[a-1][b-1]>0){
+        printf("\nAlready Entered Data.\n");
+        break;
+    }
+
+    printf("Enter distance (km): ");
+    scanf("%f", &d);
+    sys->distanceTable[a - 1][b - 1] = d;
+    sys->distanceTable[b - 1][a - 1] = d;
+    printf("Distance recorded successfully!\n");
+    }
+}
 
 
 int main() {
@@ -85,11 +183,11 @@ int main() {
         scanf("%d", &choice);
 
         switch (choice) {
-            case 1:  add_city(&sys); break;
-            case 2:  break;
-            case 3:  break;
-            case 4:  break;
-            case 5:  break;
+            case 1:  add_city(&sys);     break;
+            case 2:  rename_city(&sys);  break;
+            case 3:  remove_city(&sys);  break;
+            case 4:  show_cities(&sys);  break;
+            case 5:  set_distance(&sys); break;
             case 6:  break;
             case 7:  break;
             case 8:  break;
