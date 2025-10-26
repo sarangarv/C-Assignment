@@ -291,6 +291,28 @@ void show_citiesand_distance(struct SystemData *sys) {
     }
 }
 
+void show_report(struct SystemData *sys) {
+    if (sys->deliveryCount == 0) {
+        printf("No deliveries to report!\n");
+        return;
+    }
+    float totalCost = 0, totalDistance = 0, sumtime = 0, avetime = 0;
+    for (int i = 0; i < sys->deliveryCount; i++) {
+        totalCost += sys->deliveries[i].cost;
+        totalDistance += sys->deliveries[i].distance;
+        sumtime += sys->deliveries[i].timedur;
+    }
+
+        avetime=sumtime/sys->deliveryCount;
+    printf("\n--- Report Summary ---\n");
+    printf("Total Deliveries: %d\n", sys->deliveryCount);
+    printf("Total Distance: %.2f km\n", totalDistance);
+    printf("Average Time: %.2f Hours.\n", avetime);
+    printf("Total Revenue: %.2f LKR\n", totalCost);
+    printf("Total Profit: %.2f LKR\n", totalCost*0.25);
+    printf("Average Cost per Delivery: %.2f LKR\n", totalCost / sys->deliveryCount);
+}
+
 int main() {
     struct SystemData sys = {0}; // all values set to 0
 
