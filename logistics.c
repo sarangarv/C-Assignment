@@ -163,6 +163,64 @@ void set_distance(struct SystemData *sys) {
     }
 }
 
+float calculate_cost(float distance, float weight, struct Vehicle v) {
+    float deliveryCost = distance * v.rate * (1 + weight / 10000);
+    float fuelUsed = distance / v.efficiency;
+    float fuelCost = fuelUsed * fuelPrice;
+    float totalOperationalCost = deliveryCost + fuelCost;
+    float profit = deliveryCost * 0.25;
+    return totalOperationalCost + profit;
+}
+
+void create_delivery(struct SystemData *sys) {
+    if (sys->cityCount < 2) {
+        printf("Please add cities first!\n");
+        return;
+    }
+    if (sys->deliveryCount >= MAX_DELIVERIES) {
+        printf("Delivery limit reached!\n");
+        return;
+    }
+
+    show_cities(sys);
+    int from, to, vChoice;
+    float w;
+    printf("Enter source city number: ");
+    scanf("%d", &from);
+    printf("Enter destination city number: ");
+    scanf("%d", &to);
+    printf("Enter package weight (kg): ");
+    scanf("%f", &w);
+    printf("Select vehicle (1=Van, 2=Truck, 3=Lorry): ");
+    scanf("%d", &vChoice);
+
+    float d = sys->distanceTable[from - 1][to - 1];
+    if (d == 0) {
+        printf("** No distance recorded between selected cities!\n");
+        return;
+    }
+
+    struct Vehicle v = vehicles[vChoice - 1];
+    if (w > v.capacity) {
+        printf("** Weight exceeds vehicle capacity (%d kg)!\n", v.capacity);
+        return;
+    }
+
+    struct Delivery del;
+    strcpy(del.from, sys->cities[from - 1].name);
+    strcpy(del.to, sys->cities[to - 1].name);
+    strcpy(del.vehicle, v.name);
+    del.distance = d;
+    del.weight = w;
+    del.cost = calculate_cost(d, w, v);
+
+
+    sys->deliveries[sys->deliveryCount++] = del;
+    printf("\n** Delivery created successfully!\n");
+    printf("From: %s To: %s\n", del.from, del.to);
+    printf("Vehicle: %s | Distance: %.2f km | Time Duration: %.2f Hours | Cost: %.2f LKR\n", del.vehicle, del.distance,del.distance/v.speed, del.cost);
+}
+
 
 int main() {
     struct SystemData sys = {0}; // all values set to 0
@@ -183,12 +241,12 @@ int main() {
         scanf("%d", &choice);
 
         switch (choice) {
-            case 1:  add_city(&sys);     break;
-            case 2:  rename_city(&sys);  break;
-            case 3:  remove_city(&sys);  break;
-            case 4:  show_cities(&sys);  break;
-            case 5:  set_distance(&sys); break;
-            case 6:  break;
+            case 1:  add_city(&sys);        break;
+            case 2:  rename_city(&sys);     break;
+            case 3:  remove_city(&sys);     break;
+            case 4:  show_cities(&sys);     break;
+            case 5:  set_distance(&sys);    break;
+            case 6:  create_delivery(&sys); break;
             case 7:  break;
             case 8:  break;
             case 9: printf("Exiting program...\n"); break;
