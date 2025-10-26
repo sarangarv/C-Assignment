@@ -20,6 +20,7 @@ struct Delivery {
     char from[20];
     char to[20];
     float distance;
+    float timedur;
     float weight;
     char vehicle[10];
     float cost;
@@ -220,12 +221,14 @@ void create_delivery(struct SystemData *sys) {
         printf("** Weight exceeds vehicle capacity (%d kg)!\n", v.capacity);
         return;
     }
+    float timedura=d/v.speed;
 
     struct Delivery del;
     strcpy(del.from, sys->cities[from - 1].name);
     strcpy(del.to, sys->cities[to - 1].name);
     strcpy(del.vehicle, v.name);
     del.distance = d;
+    del.timedur = timedura;
     del.weight = w;
     del.cost = calculate_cost(d, w, v);
 
@@ -233,18 +236,19 @@ void create_delivery(struct SystemData *sys) {
     sys->deliveries[sys->deliveryCount++] = del;
     printf("\n** Delivery created successfully!\n");
     printf("From: %s To: %s\n", del.from, del.to);
-    printf("Vehicle: %s | Distance: %.2f km | Time Duration: %.2f Hours | Cost: %.2f LKR\n", del.vehicle, del.distance,del.distance/v.speed, del.cost);
+    printf("Vehicle: %s | Distance: %.2f km | Time Duration: %.2f Hours | Cost: %.2f LKR\n", del.vehicle, del.distance, timedura, del.cost);
 }
 
 void show_deliveries(struct SystemData *sys) {
     printf("\n--- Delivery Records ---\n");
     for (int i = 0; i < sys->deliveryCount; i++) {
-        printf("%d. %s → %s | Vehicle: %s | Distance: %.2f km | Cost: %.2f LKR\n",
+        printf("%d. From: %s To: %s | Vehicle: %s | Distance: %.2f km | Time Duration: %.2f Hours | Cost: %.2f LKR\n",
                i + 1,
                sys->deliveries[i].from,
                sys->deliveries[i].to,
                sys->deliveries[i].vehicle,
                sys->deliveries[i].distance,
+               sys->deliveries[i].timedur,
                sys->deliveries[i].cost);
     }
 }
@@ -275,7 +279,7 @@ int main() {
             case 4:  show_cities(&sys);     break;
             case 5:  set_distance(&sys);    break;
             case 6:  create_delivery(&sys); break;
-            case 7:  break;
+            case 7:  show_deliveries(&sys); break;
             case 8:  break;
             case 9:  break;
             case 10: printf("Exiting program...\n"); break;
