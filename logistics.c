@@ -253,6 +253,44 @@ void show_deliveries(struct SystemData *sys) {
     }
 }
 
+void show_citiesand_distance(struct SystemData *sys) {
+    if (sys->cityCount == 0) {
+        printf("No cities available!\n");
+        return;
+    }
+
+    printf("\n--- Cities ---\n");
+    for (int i = 0; i < sys->cityCount; i++) {
+        printf("%d. %s\n", i + 1, sys->cities[i].name);
+    }
+
+    if (sys->cityCount < 2) {
+        printf("\nAdd more cities to view distances!\n");
+        return;
+    }
+
+    printf("\n           --- Distance Table (km) ---\n   ");
+    // Print city names as headers
+    for (int i = 0; i < sys->cityCount; i++) {
+        printf("    %8s", sys->cities[i].name);
+    }
+    printf("\n");
+
+    // Print distances
+    for (int i = 0; i < sys->cityCount; i++) {
+        printf("%-10s", sys->cities[i].name);
+        for (int j = 0; j < sys->cityCount; j++) {
+            if (i == j)
+                printf("%10s", "-");
+            else if (sys->distanceTable[i][j] != 0)
+                printf("%10.1f", sys->distanceTable[i][j]);
+            else
+                printf("%10s", "N/A");
+        }
+        printf("\n");
+    }
+}
+
 int main() {
     struct SystemData sys = {0}; // all values set to 0
 
@@ -273,14 +311,14 @@ int main() {
         scanf("%d", &choice);
 
         switch (choice) {
-            case 1:  add_city(&sys);        break;
-            case 2:  rename_city(&sys);     break;
-            case 3:  remove_city(&sys);     break;
-            case 4:  show_cities(&sys);     break;
-            case 5:  set_distance(&sys);    break;
-            case 6:  create_delivery(&sys); break;
-            case 7:  show_deliveries(&sys); break;
-            case 8:  break;
+            case 1:  add_city(&sys);                 break;
+            case 2:  rename_city(&sys);              break;
+            case 3:  remove_city(&sys);              break;
+            case 4:  show_cities(&sys);              break;
+            case 5:  set_distance(&sys);             break;
+            case 6:  create_delivery(&sys);          break;
+            case 7:  show_deliveries(&sys);          break;
+            case 8:  show_citiesand_distance(&sys);  break;
             case 9:  break;
             case 10: printf("Exiting program...\n"); break;
             default: printf("Invalid choice! Try again.\n");
