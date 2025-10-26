@@ -43,6 +43,28 @@ float fuelPrice = 310.0; // LKR per litre
 
 /* -------- Functions -------- */
 
+void add_city(struct SystemData *sys) {
+    printf("To Exit Enter '0'\n\n");
+    while (1) {
+        if (sys->cityCount >= MAX_CITIES) {
+            printf("City limit reached!\n");
+            return;
+        }
+
+        char name[20];
+        printf("Enter %d city name: ", sys->cityCount + 1);
+        scanf("%s", name);
+
+        if (strcmp(name, "0") == 0)
+            break;
+
+        strcpy(sys->cities[sys->cityCount].name, name);
+        sys->cityCount++;
+        printf("City added successfully!\n");
+    }
+}
+
+
 
 int main() {
     struct SystemData sys = {0}; // all values set to 0
@@ -63,7 +85,7 @@ int main() {
         scanf("%d", &choice);
 
         switch (choice) {
-            case 1:  break;
+            case 1:  add_city(&sys); break;
             case 2:  break;
             case 3:  break;
             case 4:  break;
