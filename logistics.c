@@ -80,6 +80,11 @@ void rename_city(struct SystemData *sys) {
         if (strcmp(sys->cities[i].name, oldName) == 0) {
             strcpy(sys->cities[i].name, newName);
 
+            // Update deliveries
+            for (int j = 0; j < sys->deliveryCount; j++) {
+                if (strcmp(sys->deliveries[j].from, oldName) == 0) strcpy(sys->deliveries[j].from, newName);
+                if (strcmp(sys->deliveries[j].to, oldName) == 0) strcpy(sys->deliveries[j].to, newName);
+            }
 
             printf("City renamed successfully!\n");
             return;
@@ -116,6 +121,16 @@ void remove_city(struct SystemData *sys) {
         return;
     }
 
+    // Remove deliveries related to this city
+    for (int i = 0; i < sys->deliveryCount;) {
+        if (strcmp(sys->deliveries[i].from, name) == 0 || strcmp(sys->deliveries[i].to, name) == 0) {
+            for (int j = i; j < sys->deliveryCount - 1; j++)
+                sys->deliveries[j] = sys->deliveries[j + 1];
+            sys->deliveryCount--;
+        } else {
+            i++;
+        }
+    }
 
     printf("City and related deliveries removed.\n");
 }
